@@ -18121,8 +18121,9 @@ Conditional Entropy is preferrable because it does not favor small clusters. The
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="YOUR-CODE-HERE">YOUR CODE HERE<a class="anchor-link" href="#YOUR-CODE-HERE">&#182;</a></h3><p>optics(X_norm, 0.07, 3)</p>
-<h3 id="YOUR-CODE-HERE">YOUR CODE HERE<a class="anchor-link" href="#YOUR-CODE-HERE">&#182;</a></h3>
+<h3 id="Task-3.3.2-(1-points)">Task 3.3.2 (1 points)<a class="anchor-link" href="#Task-3.3.2-(1-points)">&#182;</a></h3><p><span style='color: green'><strong>[Implement]</strong></span><br>
+A) Run OPTICS with parameters $\varepsilon=0.07, minPts=3$. <br></p>
+
 </div>
 </div>
 </div>
@@ -18236,52 +18237,6 @@ Conditional Entropy is preferrable because it does not favor small clusters. The
 
 <span class="c1">### YOUR CODE HERE</span>
 
-<span class="c1">##### REMARK #####</span>
-<span class="c1"># We ran out of time to finish this part of the assignment. But this is how far we got with the outline of it.</span>
-<span class="c1">##################</span>
-
-
-<span class="kn">import</span> <span class="nn">itertools</span>
-<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">OPTICS</span>
-<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">entropy</span>
-
-<span class="c1"># Step 1: Subset selection</span>
-<span class="n">numerical_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">)]</span>  <span class="c1"># assuming numerical columns are the first 12</span>
-<span class="n">subsets</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">L</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">subset</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">numerical_cols</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
-        <span class="n">subsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">subset</span><span class="p">))</span>
-
-<span class="c1"># Step 2: Clustering with OPTICS</span>
-<span class="n">cluster_results</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="k">for</span> <span class="n">subset</span> <span class="ow">in</span> <span class="n">subsets</span><span class="p">:</span>
-    <span class="n">X_subset</span> <span class="o">=</span> <span class="n">X_norm_pt</span><span class="p">[:,</span> <span class="n">subset</span><span class="p">]</span>
-    <span class="n">optics</span> <span class="o">=</span> <span class="n">OPTICS</span><span class="p">(</span><span class="n">min_samples</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-    <span class="n">optics</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_subset</span><span class="p">)</span>
-    <span class="n">cluster_results</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">subset</span><span class="p">)]</span> <span class="o">=</span> <span class="n">optics</span><span class="o">.</span><span class="n">labels_</span>
-
-<span class="c1"># Step 3: CE computation</span>
-<span class="n">ce_results</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="k">for</span> <span class="n">subset</span><span class="p">,</span> <span class="n">labels</span> <span class="ow">in</span> <span class="n">cluster_results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="n">unique_labels</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
-    <span class="n">ce_values</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">unique_labels</span><span class="p">:</span>
-        <span class="n">idx</span> <span class="o">=</span> <span class="n">labels</span> <span class="o">==</span> <span class="n">label</span>
-        <span class="n">X_cluster</span> <span class="o">=</span> <span class="n">X_norm_pt</span><span class="p">[:,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">subset</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)))][</span><span class="n">idx</span><span class="p">]</span>
-        <span class="n">ce_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entropy</span><span class="p">(</span><span class="n">X_cluster</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
-    <span class="n">ce</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">sum</span><span class="p">(</span><span class="n">ce_v</span><span class="p">)</span> <span class="k">for</span> <span class="n">ce_v</span> <span class="ow">in</span> <span class="n">ce_values</span><span class="p">])</span> <span class="c1">#- entropy(np.array(labels))</span>
-    <span class="n">ce_results</span><span class="p">[</span><span class="n">subset</span><span class="p">]</span> <span class="o">=</span> <span class="n">ce</span>
-
-<span class="c1"># ce_results</span>
-<span class="c1"># cluster_results</span>
-<span class="c1"># X_norm_pt[:, [0,1]]</span>
-
-<span class="c1"># Keep k subsets with largest CE</span>
-<span class="n">k</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="n">top_k_subsets</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">ce_results</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="n">k</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">top_k_subsets</span><span class="p">)</span>
-
-<span class="c1"># The best combination of subsets emmitting the lowest entropy</span>
 
 <span class="c1">### YOUR CODE HERE</span>
 </pre></div>
@@ -18303,48 +18258,9 @@ Conditional Entropy is preferrable because it does not favor small clusters. The
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>[(&#39;[0, 7, 8]&#39;, array([21.66098658,  9.53136296,  6.07983679, 34.82459478])), (&#39;[1, 7, 8]&#39;, array([12.90450254, 10.8679189 , 13.79854117, 34.26095954])), (&#39;[0, 1, 7]&#39;, array([ 7.58920168,  7.51682027,  5.20056719, 50.54722566])), (&#39;[0, 1, 8]&#39;, array([ 8.6613768 ,  8.02674984,  4.90315299, 48.33924397])), (&#39;[7, 8, 10]&#39;, array([23.32260384,  8.62085894, 36.71890381]))]
+<pre>Top 3 Subsets: []
 </pre>
 </div>
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">sorted</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[&nbsp;]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>[2, 3, 5, 5, 6, 7]</pre>
-</div>
-
 </div>
 
 </div>
@@ -18402,21 +18318,28 @@ Conditional Entropy is preferrable because it does not favor small clusters. The
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Range of eps values to test</span>
-<span class="n">eps_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">DBOutliers</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">pi</span><span class="p">):</span> 
+    <span class="n">outliers</span> <span class="o">=</span> <span class="kc">None</span>
 
-<span class="c1"># Range of pi values to test</span>
-<span class="n">pi_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="c1"># Total number of data points</span>
+    <span class="n">n_samples</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-<span class="c1"># Go through all the combinations of eps and pi and plot the results</span>
-<span class="k">for</span> <span class="n">eps</span> <span class="ow">in</span> <span class="n">eps_range</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">pi</span> <span class="ow">in</span> <span class="n">pi_range</span><span class="p">:</span>
-        <span class="n">outliers</span> <span class="o">=</span> <span class="n">DBOutliers</span><span class="p">(</span><span class="n">X_norm</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">pi</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_norm</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_norm</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_norm</span><span class="p">[</span><span class="n">outliers</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_norm</span><span class="p">[</span><span class="n">outliers</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;eps = </span><span class="si">{}</span><span class="s1">, pi = </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">eps</span><span class="p">,</span> <span class="n">pi</span><span class="p">))</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Inliers&#39;</span><span class="p">,</span> <span class="s1">&#39;Outliers&#39;</span><span class="p">])</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="c1"># Initialize the matrix of distances</span>
+    <span class="n">Dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">))</span>
+
+    <span class="c1"># Compute the pairwise distances</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_samples</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_samples</span><span class="p">):</span>
+            <span class="n">Dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">X</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+            <span class="n">Dist</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">Dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="c1"># Symmetric matrix</span>
+    
+    <span class="c1"># Number of neighbors within eps</span>
+    <span class="n">n_neighbors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Dist</span> <span class="o">&lt;</span> <span class="n">eps</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Extract the indices of the outliers</span>
+    <span class="n">outliers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">n_neighbors</span> <span class="o">/</span> <span class="n">n_samples</span> <span class="o">&lt;=</span> <span class="n">pi</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>    
+
+    <span class="k">return</span> <span class="n">outliers</span>
 </pre></div>
 
      </div>
@@ -18739,13 +18662,12 @@ class="
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>def tune_dboutliers(X): 
-    eps = 0
-    pi = 0
-    ### YOUR STARTS CODE HERE</p>
-<pre><code>### YOUR ENDS CODE HERE
-return eps, pi
-</code></pre>
+<hr />
+<p><strong>Answer</strong></p>
+<p>eps is a scalar representing the maximum distance for a point to be considered close to another point; and pi is a scalar representing the maximum fraction of other points that can be close to a point for it to be considered an outlier.</p>
+<p>From the plots above we see that, the lower the epsilon, then we will have less points that are considered to be neighboors of a point p. Thus, the fraction of points $x$ considered as neighboors to a point $p$, will be lower, and thus we might detect an higher amount of outliers in our dataset.</p>
+<p>Further, the higher the value of $pi$, the easier it is for a point to be considered an outlier.</p>
+<hr />
 
 </div>
 </div>
